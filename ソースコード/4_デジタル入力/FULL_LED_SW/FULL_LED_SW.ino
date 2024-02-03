@@ -41,13 +41,17 @@ void setup() {
 
 void loop() {
 
-  static int led_mode = 0;
+  static LED_COLOR led_mode = RED;
   if(digitalRead(SW_PIN) == LOW)
   {
-    led_mode++;
-    if(led_mode > 2)
-    {
-      led_mode = 0;
+    if(led_mode == RED){
+      led_mode = GREEN;
+    }
+    else if(led_mode == GREEN){
+      led_mode = BLUE;
+    }
+    else{
+      led_mode = RED;
     }
   }
 

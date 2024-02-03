@@ -53,14 +53,17 @@ void loop() {
       case WEAK:
         switch(getAction()){
           case ENTRY:
+            Serial.println("WEAK ENTRY");
             analogWrite(LEDPIN, LED_WEAK);    //LEDを弱点灯
             setStateAction(WEAK, DO);
             break;
           case DO:
+            Serial.println("WEAK DO");
             setStateAction(WEAK, EXIT);
             delay(1000);
             break;
           case EXIT:
+            Serial.println("WEAK EXIT");
             setStateAction(MEDIUM, ENTRY);
             break;
         }
@@ -68,14 +71,17 @@ void loop() {
       case MEDIUM:
         switch(getAction()){
           case ENTRY:
+            Serial.println("MEDIUM ENTRY");
             analogWrite(LEDPIN, LED_MEDIUM);   //LEDを中点灯
             setStateAction(MEDIUM, DO);
             break;
           case DO:
+            Serial.println("MEDIUM DO");
             setStateAction(MEDIUM, EXIT);
             delay(1000);
             break;
           case EXIT:
+            Serial.println("MEDIUM EXIT");
             setStateAction(STRONG, ENTRY);
             break;
         }
@@ -83,14 +89,17 @@ void loop() {
       case STRONG:
         switch(getAction()){
           case ENTRY:
+            Serial.println("STRONG ENTRY");
             analogWrite(LEDPIN, LED_STRONG);   //LEDを強点灯(255・・・5V）
             setStateAction(STRONG, DO);
             break;
           case DO:
+            Serial.println("STRONG DO");
             setStateAction(STRONG, EXIT);
             delay(1000);
             break;
           case EXIT:
+            Serial.println("STRONG EXIT");
             setStateAction(OFF, ENTRY);
             break;
         }       
@@ -98,14 +107,17 @@ void loop() {
       case OFF:
         switch(getAction()){
           case ENTRY:
+            Serial.println("OFF ENTRY");
             analogWrite(LEDPIN, 0);     //LEDを消灯(0 ・・・　0V）
             setStateAction(OFF, DO);
             break;
           case DO:
+            Serial.println("OFF DO");
             setStateAction(OFF, EXIT);
             delay(1000);
             break;
           case EXIT:
+            Serial.println("OFF EXIT");
             setStateAction(WEAK, ENTRY);
             break;
         }

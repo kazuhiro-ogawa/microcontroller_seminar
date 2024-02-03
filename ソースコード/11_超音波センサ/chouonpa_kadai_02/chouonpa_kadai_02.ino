@@ -8,7 +8,7 @@ typedef enum {
   RED,
   GREEN,
   BLUE,
-  WHITE,
+  WHITE
 }LED_COLOR;
 
 void color_change(bool red, bool green, bool blue)
@@ -49,9 +49,9 @@ void loop() {
   delayMicroseconds(10);
   digitalWrite(TRIG_PIN, LOW);
 
-  float duration = pulseIn(ECHO_PIN, HIGH);
-  float distance = (340.0 / 1000000.0) * (duration / 2);
-  float d = distance * 100;
+  double duration = pulseIn(ECHO_PIN, HIGH);
+  double distance = (340.0 / 1000000.0) * (duration / 2);
+  double d = distance * 100;
 
   if(0 <= d && d < 5){
     color_set(RED);

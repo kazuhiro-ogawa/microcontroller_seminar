@@ -2,17 +2,15 @@
 #define TRIG 12
 
 void setup() {
-  // put your setup code here, to run once:
   pinMode(ECHO,INPUT);
   pinMode(TRIG,OUTPUT);
   Serial.begin(9600);
 }
   
 void loop() {
- 
-  // put your main code here, to run repeatedly:
-  float t; //ｔはμ秒単位
-  float distance;
+
+  double t; //ｔはμ秒単位
+  double distance;
   
   /*超音波の発生*/
   digitalWrite(TRIG,HIGH);

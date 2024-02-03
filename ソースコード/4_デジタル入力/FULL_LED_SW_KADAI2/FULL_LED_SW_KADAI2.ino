@@ -4,14 +4,19 @@
 #define COLOR_SW_PIN  4
 #define BLINK_SW_PIN  3
 
-int color_mode = 0;
-int blink_mode = 0;
-
 typedef enum {
   RED,
   GREEN,
   BLUE
 }LED_COLOR;
+
+typedef enum {
+  NORMAL,
+  BLINK
+}LED_STATE;
+
+LED_COLOR color_mode = RED;
+LED_STATE led_state = NORMAL;
 
 void color_change(bool red, bool green, bool blue)
 {
@@ -34,7 +39,7 @@ void color_change_blink(bool red, bool green, bool blue)
 
 void color_set(LED_COLOR color_num){
 
-  if(blink_mode == 0){
+  if(led_state == NORMAL){
     switch(color_num){
       case RED:
         color_change(HIGH, LOW, LOW);
@@ -77,19 +82,25 @@ void loop() {
 
   if(digitalRead(COLOR_SW_PIN) == LOW)
   {
-    color_mode++;
-    if(color_mode > 2)
-    {
-      color_mode = 0;
+    if(color_mode == RED){
+      color_mode = GREEN;
+    }
+    else if(color_mode == GREEN){
+      color_mode = BLUE;
+    }
+    else{
+      color_mode = RED;
     }
   }
 
   if(digitalRead(BLINK_SW_PIN) == LOW)
   {
-    blink_mode++;
-    if(blink_mode > 1)
+    if(led_state == NORMAL)
     {
-      blink_mode = 0;
+      led_state = BLINK;
+    }
+    else{
+      led_state = NORMAL;
     }
   }
 

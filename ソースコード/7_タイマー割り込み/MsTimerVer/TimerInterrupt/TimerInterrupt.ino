@@ -2,8 +2,7 @@
 #define LED_RED 5
 #define LED_BLUE 6
 #define LED_GREEN 7
-
-volatile int led_mode = 0;
+#define TIMERTIME 2000
 
 typedef enum {
   RED,
@@ -13,6 +12,8 @@ typedef enum {
   SKYBLUE,
   PURPLE
 }LED_COLOR;
+
+volatile LED_COLOR led_mode = RED;
 
 void color_change(bool red, bool green, bool blue)
 {
@@ -48,10 +49,14 @@ void color_set(LED_COLOR color_num){
 
 void timerTask()
 {
-  led_mode++;
-  if(led_mode > 5)
-  {
-    led_mode = 0;
+  switch(led_mode){
+    case RED: led_mode = GREEN; break;
+    case GREEN: led_mode = BLUE; break;
+    case BLUE: led_mode = YELLOW; break;
+    case YELLOW: led_mode = SKYBLUE; break;
+    case SKYBLUE: led_mode = PURPLE; break;
+    case PURPLE: led_mode = RED; break;
+    default: led_mode = RED;
   }
 }
 
@@ -59,7 +64,7 @@ void setup() {
   pinMode(LED_RED, OUTPUT);
   pinMode(LED_GREEN, OUTPUT);
   pinMode(LED_BLUE, OUTPUT);
-  MsTimer2::set(2000, timerTask);
+  MsTimer2::set(TIMERTIME, timerTask);
   MsTimer2::start();
 }
 

@@ -1,5 +1,3 @@
-/* サーボモーター課題の割り込みありバージョン */
-
 #include <Servo.h>
 
 #define OPEN_SW_PIN 2
@@ -22,7 +20,7 @@ typedef enum{
 }ACTION;
 
 Servo servo;  // Servoクラスから インスタンスservoを生成
-volatile STATE g_state = GATECLOSE;
+STATE g_state = GATECLOSE;
 ACTION g_action = ENTRY;
 
 void setAction(ACTION act){
@@ -46,9 +44,9 @@ void setStateAction(STATE state, ACTION action){
   setAction(action);
 }
 
-float measureDistance(){
-  float t; //ｔはμ秒単位
-  float distance = -1;
+double measureDistance(){
+  double t; //ｔはμ秒単位
+  double distance = -1;
   
   /*超音波の発生*/
   digitalWrite(TRIG,HIGH);
@@ -86,6 +84,7 @@ void setup() {
   
   servo.attach(SERVO_PIN);  //サーボモータの使用ピン
   servo.write(0);           //サーボモータの角度を0度に設定
+  delay(100);               //念のため100ms待つ
 }
 
 void loop() {
@@ -96,8 +95,6 @@ void loop() {
     case GATECLOSE:
       switch(getAction()){
         case ENTRY:
-          delay(100);
-          servo.write(0);
           setStateAction(GATECLOSE, DO);
           break;
         case DO:
@@ -109,10 +106,7 @@ void loop() {
             tmpstate = CLOSED;
             setStateAction(GATECLOSE, EXIT);
           }
-          else{
-            // 例外処理
-            tmpstate = GATECLOSE;
-          }
+
           break;
         case EXIT:
           setStateAction(tmpstate, ENTRY);
@@ -122,6 +116,7 @@ void loop() {
     case GATEOPEN:
       switch(getAction()){
         case ENTRY:
+          // ゲートオープン
           servo.write(90);
           delay(5000);
           setStateAction(GATEOPEN, DO);
@@ -130,6 +125,8 @@ void loop() {
           setStateAction(GATEOPEN, EXIT);
           break;          
         case EXIT:
+          // ゲートクローズ
+          servo.write(0);
           setStateAction(GATECLOSE, ENTRY);
           break;
       }
@@ -143,11 +140,11 @@ void loop() {
           break;
         case DO:
           if(digitalRead(AFTER_SW_PIN) == LOW){
-            digitalWrite(LEDRED_PIN, LOW);
             setStateAction(CLOSED, EXIT);
-          }          
+          }
           break;             
         case EXIT:
+          digitalWrite(LEDRED_PIN, LOW);
           setStateAction(GATECLOSE, ENTRY);
           break;
       }

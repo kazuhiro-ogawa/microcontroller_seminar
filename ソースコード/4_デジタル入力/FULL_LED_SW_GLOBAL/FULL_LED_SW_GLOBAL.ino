@@ -1,15 +1,15 @@
 #define LED_RED 5
 #define LED_BLUE 6
 #define LED_GREEN 7
+#define SW_PIN  4
 
 typedef enum {
   RED,
   GREEN,
   BLUE,
-  YELLOW,
-  SKYBLUE,
-  PURPLE
 }LED_COLOR;
+
+LED_COLOR led_mode = RED;
 
 void color_change(bool red, bool green, bool blue)
 {
@@ -29,15 +29,6 @@ void color_set(LED_COLOR color_num){
     case BLUE:
       color_change(LOW, LOW, HIGH);
       break;
-    case YELLOW:
-      color_change(HIGH, HIGH, LOW);
-      break;
-    case SKYBLUE:
-      color_change(LOW, HIGH, HIGH);
-      break;
-    case PURPLE:
-      color_change(HIGH, LOW, HIGH);
-      break;
     default:
       color_change(HIGH, LOW, LOW);
   }
@@ -47,31 +38,28 @@ void setup() {
   pinMode(LED_RED, OUTPUT);
   pinMode(LED_BLUE, OUTPUT);
   pinMode(LED_GREEN, OUTPUT);
+  pinMode(SW_PIN, INPUT_PULLUP);
 }
 
 void loop() {
 
-  // red
-  color_set(RED);
-  delay(2000);
+  if(digitalRead(SW_PIN) == LOW)
+  {
+    if(led_mode == RED){
+      led_mode = GREEN;
+    }
+    else if(led_mode == GREEN){
+      led_mode = BLUE;
+    }
+    else{
+      led_mode = RED;
+    }
+  }
 
-  // green
-  color_set(GREEN);
-  delay(2000);
+  color_set(led_mode);
 
-  // blue
-  color_set(BLUE);
-  delay(2000);
+  delay(100);
+}
 
-  // yellow
-  color_set(YELLOW);
-  delay(2000);
 
-  // sky blue
-  color_set(SKYBLUE);
-  delay(2000);
-
-  // purple
-  color_set(PURPLE);
-  delay(2000);
 }

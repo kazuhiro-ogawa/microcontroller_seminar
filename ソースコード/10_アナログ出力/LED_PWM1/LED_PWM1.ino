@@ -1,7 +1,7 @@
-#define LEDPIN 6     // LEDはピン3に接続
+#define LEDPIN 3     // LEDはピン3に接続
 
 typedef enum{
-  INCREASE,
+  UP,
   MAX
 }STATE;
 
@@ -11,9 +11,9 @@ typedef enum{
   EXIT
 }ACTION;
 
-STATE g_state = INCREASE;
+STATE g_state = UP;
 ACTION g_action = ENTRY;
-volatile int g_intensity = 0;     // 発光強度
+int g_intensity = 0;     // 発光強度
 
 void setAction(ACTION act){
   g_action = act;
@@ -46,16 +46,16 @@ void loop() {
 
   switch(getState())
   {
-    case INCREASE:
+    case UP:
       switch(getAction())
       {
         case ENTRY:
-          setStateAction(INCREASE, DO);
+          setStateAction(UP, DO);
           break;
         case DO:
           g_intensity++;                    //loop毎にインクリメント
           if(g_intensity >= 255){            //もしintensityが255以上なら
-            setStateAction(INCREASE, EXIT);
+            setStateAction(UP, EXIT);
           }
           analogWrite(LEDPIN, g_intensity);  //valの値に応じてLEDを点灯
           delay(10);
@@ -78,7 +78,7 @@ void loop() {
         case EXIT:
           g_intensity = 0;
           analogWrite(LEDPIN, g_intensity);  //valの値に応じてLEDを点灯
-          setStateAction(INCREASE, ENTRY);
+          setStateAction(UP, ENTRY);
           break;
       }
       break;    

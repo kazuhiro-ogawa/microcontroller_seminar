@@ -17,7 +17,7 @@ typedef enum{
   EXIT
 }ACTION;
 
-STATE g_state = OFF;
+STATE g_state = WEAK;
 ACTION g_action = ENTRY;
 
 void setAction(ACTION act){

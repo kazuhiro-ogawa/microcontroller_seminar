@@ -5,6 +5,7 @@
 void setup() {
   // 7番ピンを出力に設定
   pinMode(LEDPIN, OUTPUT);
+  randomSeed(analogRead(0));
 }
 
 void loop() {

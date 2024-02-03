@@ -11,9 +11,6 @@ void loop() {
   
   // 7番ピンに0[V]出力
   digitalWrite(LEDPIN, LOW);
-  
-  // 1秒待つ
-  delay(MSEC);
 
   for(int loop = 1; loop <= LEDLOOP; loop++)
   {

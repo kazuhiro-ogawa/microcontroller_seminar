@@ -1,27 +1,32 @@
 #include <MsTimer2.h>
 
-#define LEDPIN 7
+#define LED_GREEN 7
 #define SW_PIN_INTERRUPT 0
+#define TIMETIME 1000
 
-volatile int flg = 0;
+typedef enum{
+  OFF,
+  ON
+}LEDSTATE;
+
+volatile LEDSTATE led_state = OFF;
 
 void led_change()
 {
-  
-  if(flg == 0)
+  if(led_state == OFF)
   {
-    flg = 1;
+    led_state = ON;
   }
   else{
-    flg = 0;
+    led_state = OFF;
   }
-  if(flg == 1)
+  if(led_state == ON)
   {
-    digitalWrite(LEDPIN, HIGH);
+    digitalWrite(LED_GREEN, HIGH);
   }
   else
   {
-    digitalWrite(LEDPIN, LOW);
+    digitalWrite(LED_GREEN, LOW);
   }
   MsTimer2::stop();
 }
@@ -32,8 +37,8 @@ void timer_start()
 }
 
 void setup() {
-  pinMode(LEDPIN, OUTPUT);
-  MsTimer2::set(1000, led_change);
+  pinMode(LED_GREEN, OUTPUT);
+  MsTimer2::set(TIMETIME, led_change);
   attachInterrupt(SW_PIN_INTERRUPT, timer_start, RISING);
 }
 

@@ -1,69 +1,35 @@
-#define LED_RED 5
-#define LED_BLUE 6
-#define LED_GREEN 7
-#define TRIG_PIN 12
-#define ECHO_PIN 13
+#define ECHO 13 
+#define TRIG 12
 
-typedef enum {
-  RED,
-  GREEN,
-  BLUE,
-  WHITE,
-}LED_COLOR;
+double measureDistance(){
+  double t; //ｔはμ秒単位
+  double distance;
+  
+  /*超音波の発生*/
+  digitalWrite(TRIG,HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG,LOW);
 
-void color_change(bool red, bool green, bool blue)
-{
-  digitalWrite(LED_RED, red);
-  digitalWrite(LED_GREEN, green);
-  digitalWrite(LED_BLUE, blue);
-}
-
-void color_set(LED_COLOR color_num){
-  switch(color_num){
-    case RED:
-      color_change(HIGH, LOW, LOW);
-      break;
-    case GREEN:
-      color_change(LOW, HIGH, LOW);
-      break;
-    case BLUE:
-      color_change(LOW, LOW, HIGH);
-      break;
-    case WHITE:
-      color_change(HIGH, HIGH, HIGH);
-      break;
+  /*返ってくるまでの時間測定*/
+  t = pulseIn(ECHO,HIGH,2000000); //ECHOピンのパルスがHIGHになった時間を変数tに格納
+  if(t > 0){
+    distance = (340.0/1000000) * t * 0.5 * 100; //m→cmなので100倍する
+  }else{
+    distance = 0;
   }
+  
+  return distance;
 }
 
 void setup() {
-  pinMode(TRIG_PIN, OUTPUT);
-  pinMode(ECHO_PIN, INPUT);
+  pinMode(ECHO,INPUT);
+  pinMode(TRIG,OUTPUT);
   Serial.begin(9600);
-  pinMode(LED_RED, OUTPUT);
-  pinMode(LED_BLUE, OUTPUT);
-  pinMode(LED_GREEN, OUTPUT);
 }
-
+  
 void loop() {
-  digitalWrite(TRIG_PIN, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(TRIG_PIN, LOW);
-
-  float duration = pulseIn(ECHO_PIN, HIGH);
-  float distance = (340.0 / 1000000.0) * (duration / 2);
-  float d = distance * 100;
-
-  if(0 <= d && d < 5){
-    color_set(RED);
-  }else if(5 <= d && d < 10){
-    color_set(GREEN);
-  }else if(10 <= d && d < 20){
-    color_set(BLUE);
-  }else if(20 <= d){
-    color_set(WHITE);
-  }
-
-  Serial.print(d);
+  double distance = measureDistance();
+  Serial.print(distance);
   Serial.println("[cm]");
-  delay(500);  
+  delay(300);
 }

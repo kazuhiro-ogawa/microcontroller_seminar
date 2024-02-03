@@ -3,8 +3,6 @@
 #define LED_GREEN 7
 #define SW_PIN  4
 
-int led_mode = 0;
-
 typedef enum {
   RED,
   GREEN,
@@ -13,6 +11,8 @@ typedef enum {
   GREEN_BLINK,
   BLUE_BLINK
 }LED_COLOR;
+
+LED_COLOR led_mode = 0;
 
 void color_change(bool red, bool green, bool blue)
 {
@@ -70,10 +70,14 @@ void loop() {
 
   if(digitalRead(SW_PIN) == LOW)
   {
-    led_mode++;
-    if(led_mode > 5)
-    {
-      led_mode = 0;
+    switch(led_mode){
+      case RED: led_mode = GREEN; break;
+      case GREEN: led_mode = BLUE; break;
+      case BLUE: led_mode = RED_BLINK; break;
+      case RED_BLINK: led_mode = GREEN_BLINK; break;
+      case GREEN_BLINK: led_mode = BLUE_BLINK; break;
+      case BLUE_BLINK: led_mode = RED; break;
+      default: led_mode = RED;
     }
   }
 

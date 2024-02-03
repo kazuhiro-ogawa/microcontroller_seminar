@@ -18,7 +18,7 @@ void setup() {
 }
 
 void loop() {
-  float volt = analogRead(VOL)*((float)5/1024);
+  double volt = analogRead(VOL)*((double)5/1024);
   Serial.println(volt);
   
   if(volt >= 3.0){
