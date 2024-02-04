@@ -81,7 +81,7 @@ void loop(){
             setStateAction(WEAK, ENTRY);
             break;
         }
-
+        break;
       case WEAK:
         switch(getAction()){
           case ENTRY:
