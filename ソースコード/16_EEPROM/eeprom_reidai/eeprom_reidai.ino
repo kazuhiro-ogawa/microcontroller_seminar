@@ -82,8 +82,8 @@ void loop() {
 
   while(1){
     if(Serial.available()>0){  // 入力された文字が何バイトか調べその回数分繰り返す
-      input = Serial.read() - 48;   // 1バイト分のデータを読み取る
-
+      input = Serial.read() - 48 - 1;   // 1バイト分のデータを読み取る
+      
       switch(input){
         case RED:
         case GREEN:     
